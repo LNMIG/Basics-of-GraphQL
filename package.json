@@ -1,0 +1,15 @@
+{
+  "name": "basics-of-graphql",
+  "version": "1.0.0",
+  "description": "basics of graphql",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "LNMIG",
+  "license": "MIT",
+  "dependencies": {
+    "graphql": "^16.6.0"
+  }
+}
