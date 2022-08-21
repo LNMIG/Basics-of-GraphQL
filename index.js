@@ -1,16 +1,23 @@
-import { graphql, buildSchema } from 'graphql'
+import { makeExecutableSchema } from '@graphql-tools/schema'
+import { graphqlHTTP } from 'express-graphql'
+import express from 'express'
+import { readFileSync } from 'fs'
+import { join } from 'path'
+import { resolvers } from './lib/rootValues.js'
 
-// definir esquema
-let schema = buildSchema(`
-    type Query {
-        hello: String
-    }
-`);
+const app = express()
+const port = process.env.PORT || 3000
 
-// Configurar resolvers
-let rootValue = { hello: () => 'Hola Mundo' };
+const typeDefs = readFileSync( join( './', 'lib', 'schema.gql'),'utf-8' )
 
-let source = '{ hello }';
+const schema = makeExecutableSchema({ typeDefs, resolvers });
 
-//ejecutar Query 'hello'
-graphql({schema, source, rootValue}).then((data) => { console.log(data)});
+app.use('/api', graphqlHTTP({
+    schema: schema,
+    rootValue: resolvers,
+    graphiql: true
+}))
+
+app.listen(port, () => {
+    console.log(`Server is listening at http://localhost:${port}/api`)
+})
